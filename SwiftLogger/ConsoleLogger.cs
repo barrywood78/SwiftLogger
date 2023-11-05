@@ -1,13 +1,9 @@
-﻿using System;
-using SwiftLogger.Enums;
-using SwiftLogger.Models;
+﻿using SwiftLogger.Models;
+using System;
 
 namespace SwiftLogger
 {
-    /// <summary>
-    /// Provides logging capabilities to the console.
-    /// </summary>
-    public class ConsoleLogger : ILogger
+    internal class ConsoleLogger : ILogger
     {
         private readonly ConsoleLoggerConfig _config;
 
@@ -18,14 +14,21 @@ namespace SwiftLogger
 
         public void Log(LogEvent logEvent)
         {
+            if (_config.IsLogLevelExcluded(logEvent.Level))
+                return;
+
             if (_config.LogLevelColors.TryGetValue(logEvent.Level, out var color))
             {
                 Console.ForegroundColor = color;
             }
-            Console.WriteLine($"{logEvent.Timestamp:yyyy-MM-dd HH:mm:ss} [{logEvent.Level}] {logEvent.Message}");
+
+            var message = _config.MessageTemplate
+                .Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat))
+                .Replace("{Level}", logEvent.Level.ToString())
+                .Replace("{Message}", logEvent.Message);
+
+            Console.WriteLine(message);
             Console.ResetColor();
         }
     }
-
-
 }
