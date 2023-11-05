@@ -1,27 +1,37 @@
 ﻿using SwiftLogger.Enums;
-using System.Collections.Generic;
 using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace SwiftLogger.Configs
 {
+    /// <summary>
+    /// Represents a configuration for console logging.
+    /// </summary>
     public class ConsoleLoggerConfig : BaseLoggerConfig<ConsoleLoggerConfig>
     {
-        internal Dictionary<LogLevel, ConsoleColor> LogLevelColors { get; private set; } = new Dictionary<LogLevel, ConsoleColor>
+        /// <summary>
+        /// Gets the log level colors for console logging.
+        /// </summary>
+        internal readonly Dictionary<LogLevel, ConsoleColor> LogLevelColors = new()
         {
-            { LogLevel.Debug, ConsoleColor.White },
-            { LogLevel.Information, ConsoleColor.White },
-            { LogLevel.Warning, ConsoleColor.Yellow },
-            { LogLevel.Error, ConsoleColor.Red },
-            { LogLevel.Critical, ConsoleColor.Red },
+            [LogLevel.Trace] = ConsoleColor.White,
+            [LogLevel.Debug] = ConsoleColor.White,
+            [LogLevel.Information] = ConsoleColor.White,
+            [LogLevel.Warning] = ConsoleColor.Yellow,
+            [LogLevel.Error] = ConsoleColor.Red,
+            [LogLevel.Critical] = ConsoleColor.Red
         };
 
+        /// <summary>
+        /// Sets the color for a specific log level in console logging.
+        /// </summary>
+        /// <param name="level">The log level.</param>
+        /// <param name="color">The console color.</param>
+        /// <returns>The console logger configuration.</returns>
         public ConsoleLoggerConfig SetColorForLogLevel(LogLevel level, ConsoleColor color)
         {
             LogLevelColors[level] = color;
             return this;
         }
-
     }
 }
