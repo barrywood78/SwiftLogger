@@ -25,26 +25,47 @@ using SwiftLogger.Models;
 //                .Build();
 
 // Set up the Console Logger configuration
-var consoleConfig = new ConsoleLoggerConfig()
-    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
-    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta)
-    .SetExcludeLogLevel(LogLevel.Debug)
-    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
-    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");
+//var consoleConfig = new ConsoleLoggerConfig()
+//    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
+//    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta)
+//    .SetExcludeLogLevel(LogLevel.Debug)
+//    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
+//    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");
 
-// Set up the File Logger configuration, with separation by date
-var fileLoggerConfig = new FileLoggerConfig()
-    .EnableSeparationByDate()
-    .SetFilePath("myLog.txt")
-    .SetExcludeLogLevel(LogLevel.Debug)
-    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
-    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");  
+//// Set up the File Logger configuration, with separation by date
+//var fileLoggerConfig = new FileLoggerConfig()
+//    .EnableSeparationByDate()
+//    .SetFilePath("myLog.txt")
+//    .SetExcludeLogLevel(LogLevel.Debug)
+//    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
+//    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");  
 
-// Build the logger using both configurations
+//// Build the logger using both configurations
+//var logger = new SwiftLoggerConfig()
+//    .LogTo.Console(consoleConfig)
+//    .LogTo.File(fileLoggerConfig)
+//    .Build();
+
+string? emailPassword = Environment.GetEnvironmentVariable("LOGGER_EMAIL_PASSWORD", EnvironmentVariableTarget.User) ?? string.Empty;
+var emailConfig = new EmailLoggerConfig()
+    .SetSmtpServer("smtp.gmail.com")
+    .SetSmtpPort(587)
+    .UseSecureSocketLayer(true)
+    .SetAuthentication("barry.v.wood@gmail.com", emailPassword)
+    .SetFromAddress("barry.v.wood@gmail.com")
+    .SetToAddress("8195924544@msg.koodomobile.com")
+    .SetTimestampFormat("yyyy-MM-dd HH:mm:ss")
+    .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
+    .SetExcludeLogLevel(LogLevel.Debug)
+    .SetExcludeLogLevel(LogLevel.Information)
+    .SetExcludeLogLevel(LogLevel.Warning)
+    .SetExcludeLogLevel(LogLevel.Error);
+
 var logger = new SwiftLoggerConfig()
-    .LogTo.Console(consoleConfig)
-    .LogTo.File(fileLoggerConfig)
+    .LogTo.Email(emailConfig)
+    .LogTo.Console()
     .Build();
+
 
 
 

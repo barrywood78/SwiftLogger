@@ -25,6 +25,12 @@ namespace SwiftLogger
             return _parent;
         }
 
+        public SwiftLoggerConfig Email(EmailLoggerConfig config = null)
+        {
+            _parent.AddLogger(new EmailLogger(config));
+            return _parent;
+        }
+
 
 
     }
