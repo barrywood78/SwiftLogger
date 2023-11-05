@@ -1,4 +1,7 @@
 ﻿
+using SwiftLogger.Configs;
+using SwiftLogger.Loggers;
+
 namespace SwiftLogger
 {
     public class LoggerDestinations
@@ -16,7 +19,14 @@ namespace SwiftLogger
             return _parent;
         }
 
-        // ... other methods for File, etc.
+        public SwiftLoggerConfig File(FileLoggerConfig config = null)
+        {
+            _parent.AddLogger(new FileLogger(config));
+            return _parent;
+        }
+
+
+
     }
 
 }

@@ -1,7 +1,8 @@
-﻿using SwiftLogger.Models;
+﻿using SwiftLogger.Configs;
+using SwiftLogger.Models;
 using System;
 
-namespace SwiftLogger
+namespace SwiftLogger.Loggers
 {
     internal class ConsoleLogger : ILogger
     {
@@ -12,11 +13,10 @@ namespace SwiftLogger
             _config = config ?? new ConsoleLoggerConfig(); // Use provided config or default to new config.
         }
 
-        public void Log(LogEvent logEvent)
+        public Task Log(LogEvent logEvent)
         {
             if (_config.IsLogLevelExcluded(logEvent.Level))
-                return;
-
+                return Task.CompletedTask;
             if (_config.LogLevelColors.TryGetValue(logEvent.Level, out var color))
             {
                 Console.ForegroundColor = color;
@@ -29,6 +29,7 @@ namespace SwiftLogger
 
             Console.WriteLine(message);
             Console.ResetColor();
+            return Task.CompletedTask;
         }
     }
 }

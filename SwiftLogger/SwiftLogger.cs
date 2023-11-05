@@ -1,5 +1,7 @@
 ﻿using SwiftLogger.Enums;
 using SwiftLogger.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SwiftLogger
 {
@@ -12,7 +14,7 @@ namespace SwiftLogger
             _loggers = loggers;
         }
 
-        public void Log(LogLevel level, string message)
+        public async Task Log(LogLevel level, string message)
         {
             var logEvent = new LogEvent
             {
@@ -23,9 +25,8 @@ namespace SwiftLogger
 
             foreach (var logger in _loggers)
             {
-                logger.Log(logEvent);
+                await logger.Log(logEvent);
             }
         }
     }
-
 }
