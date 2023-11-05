@@ -36,7 +36,7 @@ namespace SwiftLogger.Test
         public async Task ConsoleLogger_ShouldWriteCorrectlyToConsoleAsync()
         {
             // Arrange
-            var logger = new SwiftLoggerConfig()
+            var logger = new LoggerConfigBuilder()
                 .LogTo.Console()
                 .Build();
 
@@ -44,7 +44,7 @@ namespace SwiftLogger.Test
             var expectedLogOutput = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} [Information] {message}\r\n"; 
 
             // Act
-            await logger.Log(LogLevel.Info, message);
+            await logger.Log(LogLevel.Information, message);
 
             // Assert
             var actualLogOutput = _stringWriter?.ToString();

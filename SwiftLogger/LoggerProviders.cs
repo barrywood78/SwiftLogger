@@ -4,28 +4,28 @@ using SwiftLogger.Loggers;
 
 namespace SwiftLogger
 {
-    public class LoggerDestinations
+    public class LoggerProviders
     {
-        private readonly SwiftLoggerConfig _parent;
+        private readonly LoggerConfigBuilder _parent;
 
-        internal LoggerDestinations(SwiftLoggerConfig parent)
+        internal LoggerProviders(LoggerConfigBuilder parent)
         {
             _parent = parent;
         }
 
-        public SwiftLoggerConfig Console(ConsoleLoggerConfig config = null)
+        public LoggerConfigBuilder Console(ConsoleLoggerConfig config = null)
         {
             _parent.AddLogger(new ConsoleLogger(config));
             return _parent;
         }
 
-        public SwiftLoggerConfig File(FileLoggerConfig config = null)
+        public LoggerConfigBuilder File(FileLoggerConfig config = null)
         {
             _parent.AddLogger(new FileLogger(config));
             return _parent;
         }
 
-        public SwiftLoggerConfig Email(EmailLoggerConfig config = null)
+        public LoggerConfigBuilder Email(EmailLoggerConfig config = null)
         {
             _parent.AddLogger(new EmailLogger(config));
             return _parent;

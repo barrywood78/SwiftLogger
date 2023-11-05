@@ -26,6 +26,5 @@
             return this;
         }
 
-        // Any additional methods or properties specific to FileLoggerConfig can be added here.
     }
 }

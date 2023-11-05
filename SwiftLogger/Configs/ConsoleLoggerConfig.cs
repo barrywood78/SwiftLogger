@@ -11,12 +11,10 @@ namespace SwiftLogger.Configs
         internal Dictionary<LogLevel, ConsoleColor> LogLevelColors { get; private set; } = new Dictionary<LogLevel, ConsoleColor>
         {
             { LogLevel.Debug, ConsoleColor.White },
-            { LogLevel.Info, ConsoleColor.White },
-            { LogLevel.Warn, ConsoleColor.Yellow },
+            { LogLevel.Information, ConsoleColor.White },
+            { LogLevel.Warning, ConsoleColor.Yellow },
             { LogLevel.Error, ConsoleColor.Red },
             { LogLevel.Critical, ConsoleColor.Red },
-            { LogLevel.Exception, ConsoleColor.Red },
-            { LogLevel.Alert, ConsoleColor.Red }
         };
 
         public ConsoleLoggerConfig SetColorForLogLevel(LogLevel level, ConsoleColor color)
@@ -25,6 +23,5 @@ namespace SwiftLogger.Configs
             return this;
         }
 
-        // Any additional methods or properties specific to ConsoleLoggerConfig can be added here.
     }
 }

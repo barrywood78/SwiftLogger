@@ -15,8 +15,9 @@ namespace SwiftLogger.Loggers
 
         public Task Log(LogEvent logEvent)
         {
-            if (_config.IsLogLevelExcluded(logEvent.Level))
+            if (!_config.ShouldLog(logEvent.Level))
                 return Task.CompletedTask;
+
             if (_config.LogLevelColors.TryGetValue(logEvent.Level, out var color))
             {
                 Console.ForegroundColor = color;

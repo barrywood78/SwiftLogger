@@ -1,11 +1,11 @@
 ﻿
 namespace SwiftLogger
 {
-    public class SwiftLoggerConfig
+    public class LoggerConfigBuilder
     {
         private readonly List<ILogger> _loggers = new List<ILogger>();
 
-        public LoggerDestinations LogTo => new LoggerDestinations(this);
+        public LoggerProviders LogTo => new LoggerProviders(this);
 
         internal void AddLogger(ILogger logger)
         {

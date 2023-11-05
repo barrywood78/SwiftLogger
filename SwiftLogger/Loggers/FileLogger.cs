@@ -16,7 +16,7 @@ namespace SwiftLogger
 
         public async Task Log(LogEvent logEvent)
         {
-            if (_config.IsLogLevelExcluded(logEvent.Level))
+            if (!_config.ShouldLog(logEvent.Level))
                 return;
 
             var message = _config.MessageTemplate

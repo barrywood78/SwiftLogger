@@ -35,7 +35,7 @@ namespace SwiftLogger.Loggers
 
         public Task Log(LogEvent logEvent)
         {
-            if (_config.IsLogLevelExcluded(logEvent.Level))
+            if (!_config.ShouldLog(logEvent.Level))
                 return Task.CompletedTask;
 
             var messageBody = _config.MessageTemplate
