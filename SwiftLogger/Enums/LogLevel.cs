@@ -8,10 +8,12 @@ namespace SwiftLogger.Enums
 {
     public enum LogLevel
     {
+        Info,
         Debug,
-        Information,
-        Warning,
+        Warn,
         Error,
-        Critical
+        Critical,
+        Exception,
+        Alert
     }
 }

@@ -57,8 +57,8 @@ var emailConfig = new EmailLoggerConfig()
     .SetTimestampFormat("yyyy-MM-dd HH:mm:ss")
     .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
     .SetExcludeLogLevel(LogLevel.Debug)
-    .SetExcludeLogLevel(LogLevel.Information)
-    .SetExcludeLogLevel(LogLevel.Warning)
+    .SetExcludeLogLevel(LogLevel.Info)
+    .SetExcludeLogLevel(LogLevel.Warn)
     .SetExcludeLogLevel(LogLevel.Error);
 
 var logger = new SwiftLoggerConfig()
@@ -70,8 +70,8 @@ var logger = new SwiftLoggerConfig()
 
 
 await logger.Log(LogLevel.Debug, "This is a debug message.");
-await logger.Log(LogLevel.Information, "This is an informational message.");
-await logger.Log(LogLevel.Warning, "This is a warning message.");
+await logger.Log(LogLevel.Info, "This is an informational message.");
+await logger.Log(LogLevel.Warn, "This is a warning message.");
 await logger.Log(LogLevel.Error, "This is an error message.");
 await logger.Log(LogLevel.Critical, "This is a critical message.");
 
