@@ -33,7 +33,7 @@ namespace SwiftLogger.Test
         }
 
         [TestMethod]
-        public void ConsoleLogger_ShouldWriteCorrectlyToConsole()
+        public async Task ConsoleLogger_ShouldWriteCorrectlyToConsoleAsync()
         {
             // Arrange
             var logger = new SwiftLoggerConfig()
@@ -41,10 +41,10 @@ namespace SwiftLogger.Test
                 .Build();
 
             var message = "This is an informational message.";
-            var expectedLogOutput = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} [Information] {message}\r\n"; // Note: \r\n is used for newline in Windows environments.
+            var expectedLogOutput = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} [Information] {message}\r\n"; 
 
             // Act
-            logger.Log(LogLevel.Information, message);
+            await logger.Log(LogLevel.Info, message);
 
             // Assert
             var actualLogOutput = _stringWriter?.ToString();

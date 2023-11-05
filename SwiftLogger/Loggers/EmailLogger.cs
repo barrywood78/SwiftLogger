@@ -20,6 +20,17 @@ namespace SwiftLogger.Loggers
                 EnableSsl = _config.UseSsl,
                 Credentials = _config.Credentials
             };
+
+            _smtpClient.SendCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    // Log error or handle it as needed
+                    // Example: Console.WriteLine($"Failed to send email: {e.Error.Message}");
+                }
+                var mailMessage = e.UserState as MailMessage;
+                mailMessage?.Dispose();
+            };
         }
 
         public Task Log(LogEvent logEvent)
@@ -40,12 +51,13 @@ namespace SwiftLogger.Loggers
 
             try
             {
-                _smtpClient.Send(mailMessage);
+                _smtpClient.SendAsync(mailMessage, mailMessage);
             }
             catch
             {
-                // You might want to handle email sending failures here.
-                // Perhaps retry, log to another logger, etc.
+                // Handle sending errors here
+                mailMessage.Dispose();
+                // Perhaps log to another logger, etc.
             }
 
             return Task.CompletedTask;
