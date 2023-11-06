@@ -11,17 +11,16 @@ namespace SwiftLogger.Configs
     public class EmailLoggerConfig : BaseLoggerConfig<EmailLoggerConfig>
     {
         // SMTP server details
-        internal string SmtpServer { get; private set; }
+        internal string? SmtpServer { get; private set; }
         internal int SmtpPort { get; private set; }
         internal bool UseSsl { get; private set; }
 
         // Authentication details
-        internal NetworkCredential Credentials { get; private set; }
-        internal bool UseDefaultCredentials { get; private set; } = false;
+        internal NetworkCredential? Credentials { get; private set; }
 
         // Email details
-        internal string FromAddress { get; private set; }
-        internal string ToAddress { get; private set; }
+        internal string? FromAddress { get; private set; }
+        internal string? ToAddress { get; private set; }
 
         /// <summary>
         /// Sets the SMTP server for email logging.
@@ -77,17 +76,7 @@ namespace SwiftLogger.Configs
             return this;
         }
 
-        /// <summary>
-        /// Configures the usage of default credentials for SMTP.
-        /// </summary>
-        /// <param name="useDefault">Flag indicating whether to use default credentials. Default is true.</param>
-        /// <returns>The email logger configuration.</returns>
-        public EmailLoggerConfig UseDefaultCreds(bool useDefault = true)
-        {
-            UseDefaultCredentials = useDefault;
-            return this;
-        }
-
+        
         /// <summary>
         /// Sets the sender's email address for email logging.
         /// </summary>

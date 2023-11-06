@@ -26,7 +26,6 @@ namespace SwiftLogger.Loggers
 
             _smtpClient = new SmtpClient(_config.SmtpServer, _config.SmtpPort)
             {
-                UseDefaultCredentials = _config.UseDefaultCredentials,
                 EnableSsl = _config.UseSsl,
                 Credentials = _config.Credentials
             };
@@ -47,7 +46,7 @@ namespace SwiftLogger.Loggers
 
             var messageBody = $"{logEvent.Timestamp.ToString(_config.TimestampFormat)} {logEvent.Level} {logEvent.Message}";
 
-            using var mailMessage = new MailMessage(_config.FromAddress, _config.ToAddress)
+            using var mailMessage = new MailMessage(_config.FromAddress ?? string.Empty, _config.ToAddress ?? string.Empty)
             {
                 Subject = $"Log - {logEvent.Level}",
                 Body = messageBody
