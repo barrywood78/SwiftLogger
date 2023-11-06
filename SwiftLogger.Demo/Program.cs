@@ -12,12 +12,12 @@ using SwiftLogger.Models;
 //                .Build();
 
 
-//var consoleConfig = new ConsoleLoggerConfig()
-//    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
-//    .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
-//    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
-//    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta)
-//    .SetExcludeLogLevel(LogLevel.Debug);
+var consoleConfig = new ConsoleLoggerConfig()
+    .SetTimestampFormat("0")
+    .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
+    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
+    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta)
+    .SetExcludeLogLevel(LogLevel.Debug);
 
 
 //var logger = new SwiftLoggerConfig()
@@ -32,13 +32,13 @@ using SwiftLogger.Models;
 //    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
 //    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");
 
-//// Set up the File Logger configuration, with separation by date
-//var fileLoggerConfig = new FileLoggerConfig()
-//    .EnableSeparationByDate()
-//    .SetFilePath("myLog.txt")
-//    .SetExcludeLogLevel(LogLevel.Debug)
-//    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
-//    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");  
+// Set up the File Logger configuration, with separation by date
+var fileLoggerConfig = new FileLoggerConfig()
+    .EnableSeparationByDate()
+    .SetFilePath("myLog.txt")
+    .SetExcludeLogLevel(LogLevel.Debug)
+    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
+    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");
 
 //// Build the logger using both configurations
 //var logger = new SwiftLoggerConfig()
@@ -63,9 +63,7 @@ var emailConfig = new EmailLoggerConfig()
     .DisableLogging();
 
 var logger = new LoggerConfigBuilder()
-    .LogTo.Email(emailConfig)
-    .LogTo.Console()
-    .LogTo.File()
+    .LogTo.File(fileLoggerConfig)
     .Build();
 
 

@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftLogger", "SwiftLogger\SwiftLogger.csproj", "{F87A2DCC-7898-488A-831B-6661E95CE667}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwiftLogger", "SwiftLogger\SwiftLogger.csproj", "{F87A2DCC-7898-488A-831B-6661E95CE667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftLogger.Test", "SwiftLogger.Test\SwiftLogger.Test.csproj", "{60BDF52F-870E-4F67-B59A-2E2BEE02636A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftLogger.Demo", "SwiftLogger.Demo\SwiftLogger.Demo.csproj", "{408D664C-2270-4287-AD2F-3AB353BC101D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwiftLogger.Demo", "SwiftLogger.Demo\SwiftLogger.Demo.csproj", "{408D664C-2270-4287-AD2F-3AB353BC101D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{F87A2DCC-7898-488A-831B-6661E95CE667}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F87A2DCC-7898-488A-831B-6661E95CE667}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F87A2DCC-7898-488A-831B-6661E95CE667}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60BDF52F-870E-4F67-B59A-2E2BEE02636A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60BDF52F-870E-4F67-B59A-2E2BEE02636A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60BDF52F-870E-4F67-B59A-2E2BEE02636A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60BDF52F-870E-4F67-B59A-2E2BEE02636A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{408D664C-2270-4287-AD2F-3AB353BC101D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{408D664C-2270-4287-AD2F-3AB353BC101D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{408D664C-2270-4287-AD2F-3AB353BC101D}.Release|Any CPU.ActiveCfg = Release|Any CPU
