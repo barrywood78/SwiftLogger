@@ -46,11 +46,44 @@ namespace SwiftLogger.Loggers
 
             var messageBody = $"{logEvent.Timestamp.ToString(_config.TimestampFormat)} {logEvent.Level} {logEvent.Message}";
 
-            using var mailMessage = new MailMessage(_config.FromAddress ?? string.Empty, _config.ToAddress ?? string.Empty)
+            using var mailMessage = new MailMessage
             {
-                Subject = $"Log - {logEvent.Level}",
+                From = new MailAddress(_config.FromAddress ?? string.Empty),
+                Subject = FormatSubject(logEvent),
                 Body = messageBody
             };
+
+            // Add recipients
+            foreach (var recipient in _config.Recipients)
+            {
+                mailMessage.Bcc.Add(recipient);
+            }
+
+            // Add attachments
+            foreach (var attachmentSource in _config.Attachments)
+            {
+                Attachment attachment;
+                if (attachmentSource.FilePath != null)
+                {
+                    attachment = new Attachment(attachmentSource.FilePath);
+                }
+                else if (attachmentSource.FileStream != null)
+                {
+                    attachment = new Attachment(attachmentSource.FileStream, "attachment"); // Assuming a generic name for stream-based attachments
+                }
+                else if (attachmentSource.FileBytes != null)
+                {
+                    using MemoryStream memStream = new MemoryStream(attachmentSource.FileBytes);
+                    attachment = new Attachment(memStream, "attachment"); // Assuming a generic name for byte array-based attachments
+                }
+                else
+                {
+                    continue; // No valid source found
+                }
+
+                mailMessage.Attachments.Add(attachment);
+            }
+
 
             try
             {
@@ -60,6 +93,16 @@ namespace SwiftLogger.Loggers
             {
                 Console.WriteLine($"Error sending email: {ex.Message}");
             }
+        }
+
+        private string FormatSubject(LogEvent logEvent)
+        {
+            // This is a basic implementation. Depending on how complex your subject format gets,
+            // you might want a more sophisticated templating approach.
+            var formattedSubject = _config.SubjectFormat ?? "Log";
+            formattedSubject = formattedSubject.Replace("{Level}", logEvent.Level.ToString());
+            formattedSubject = formattedSubject.Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat));
+            return formattedSubject;
         }
 
         /// <summary>

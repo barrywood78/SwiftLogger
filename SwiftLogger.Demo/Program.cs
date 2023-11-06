@@ -53,9 +53,12 @@ var emailConfig = new EmailLoggerConfig()
     .UseSecureSocketLayer(true)
     .SetAuthentication("barry.v.wood@gmail.com", emailPassword)
     .SetFromAddress("barry.v.wood@gmail.com")
-    .SetToAddress("8195924544@msg.koodomobile.com")
+    .AddRecipient("8195924544@msg.koodomobile.com")
+    .AddRecipient("barry.v.wood@gmail.com")
     .SetTimestampFormat("yyyy-MM-dd HH:mm:ss")
     .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
+    .SetSubjectFormat("Test App Log - {Level} : {Timestamp} $$")
+    .AddAttachment("C:\\Untitled.png")
     .SetMinimumLogLevel(LogLevel.Critical)
     .DisableLogging();
 

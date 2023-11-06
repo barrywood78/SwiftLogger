@@ -16,7 +16,7 @@ namespace SwiftLogger.Loggers
         /// Initializes a new instance of the <see cref="ConsoleLogger"/> class.
         /// </summary>
         /// <param name="config">The configuration to be used for logging. If null, a default configuration will be used.</param>
-        public ConsoleLogger(ConsoleLoggerConfig config = null)
+        public ConsoleLogger(ConsoleLoggerConfig? config = null)
         {
             _config = config ?? new ConsoleLoggerConfig();
         }

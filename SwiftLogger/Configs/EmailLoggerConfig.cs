@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System.Net;
+using System.Net.Mail;
 using SwiftLogger.Enums;
 
 namespace SwiftLogger.Configs
@@ -20,7 +21,9 @@ namespace SwiftLogger.Configs
 
         // Email details
         internal string? FromAddress { get; private set; }
-        internal string? ToAddress { get; private set; }
+        internal List<string> Recipients { get; } = new();
+        internal string? SubjectFormat { get; private set; }
+        internal List<AttachmentSource> Attachments { get; } = new List<AttachmentSource>();
 
         /// <summary>
         /// Sets the SMTP server for email logging.
@@ -91,18 +94,50 @@ namespace SwiftLogger.Configs
             return this;
         }
 
-        /// <summary>
-        /// Sets the recipient's email address for email logging.
-        /// </summary>
-        /// <param name="to">The recipient's email address.</param>
-        /// <returns>The email logger configuration.</returns>
-        public EmailLoggerConfig SetToAddress(string to)
+        public EmailLoggerConfig SetSubjectFormat(string format)
         {
-            if (string.IsNullOrWhiteSpace(to))
-                throw new ArgumentException("To address cannot be null or whitespace.", nameof(to));
+            SubjectFormat = format;
+            return this;
+        }
 
-            ToAddress = to;
+        public EmailLoggerConfig AddRecipient(string recipient)
+        {
+            if (string.IsNullOrWhiteSpace(recipient))
+                throw new ArgumentException("Recipient address cannot be null or whitespace.", nameof(recipient));
+
+            Recipients.Add(recipient);
+            return this;
+        }
+
+        public EmailLoggerConfig AddAttachment(string filePath)
+        {
+            Attachments.Add(AttachmentSource.FromFilePath(filePath));
+            return this;
+        }
+
+        public EmailLoggerConfig AddAttachment(Stream stream)
+        {
+            Attachments.Add(AttachmentSource.FromStream(stream));
+            return this;
+        }
+
+        public EmailLoggerConfig AddAttachment(byte[] bytes)
+        {
+            Attachments.Add(AttachmentSource.FromBytes(bytes));
             return this;
         }
     }
+
+    internal class AttachmentSource
+    {
+        public string? FilePath { get; set; }
+        public Stream? FileStream { get; set; }
+        public byte[]? FileBytes { get; set; }
+
+        public static AttachmentSource FromFilePath(string path) => new AttachmentSource { FilePath = path };
+        public static AttachmentSource FromStream(Stream stream) => new AttachmentSource { FileStream = stream };
+        public static AttachmentSource FromBytes(byte[] bytes) => new AttachmentSource { FileBytes = bytes };
+    }
+
+
 }
