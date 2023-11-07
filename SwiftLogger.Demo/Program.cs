@@ -25,19 +25,20 @@ var emailConfig = new EmailLoggerConfig()
     .UseSecureSocketLayer(true)
     .SetAuthentication(emailFrom, smtpPassword)
     .SetFromAddress(emailFrom)
-    .AddRecipient(emailToSms)
+    .AddRecipient(emailToSms) // emailToSms = Email address that sends SMS (text message)
     
     .SetMessageTemplate("Critical Log: {Timestamp} - {Message}")
     .SetMinimumLogLevel(LogLevel.Critical) // Only send emails for Critical Logs
 
     .SetSubjectFormat("App Log")
-    .AddAttachment(@"C:\Untitled.png") 
+    //.AddAttachment(@"C:\Untitled.png") 
     ;
 
 // Build the logger using configuration
 var logger = new LoggerConfigBuilder()
     .LogTo.Console(consoleConfig)
     .LogTo.File(fileConfig)
+    .LogTo.Email(emailConfig)
     .Build();
 
 
