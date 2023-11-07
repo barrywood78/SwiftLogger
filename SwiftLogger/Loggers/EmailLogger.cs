@@ -6,24 +6,15 @@ using System.Threading.Tasks;
 
 namespace SwiftLogger.Loggers
 {
-    /// <summary>
-    /// Provides logging functionality that sends log events as emails based on the provided configuration.
-    /// </summary>
     internal class EmailLogger : ILogger, IDisposable
     {
         private readonly SmtpClient _smtpClient;
         private readonly EmailLoggerConfig _config;
-        private bool _disposed = false; // To detect redundant calls to Dispose
+        private bool _disposed = false;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EmailLogger"/> class.
-        /// </summary>
-        /// <param name="config">The email logger configuration.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="config"/> is null.</exception>
         public EmailLogger(EmailLoggerConfig config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
-
             _smtpClient = new SmtpClient(_config.SmtpServer, _config.SmtpPort)
             {
                 EnableSsl = _config.UseSsl,
@@ -31,18 +22,10 @@ namespace SwiftLogger.Loggers
             };
         }
 
-        /// <summary>
-        /// Asynchronously logs the provided event as an email.
-        /// </summary>
-        /// <param name="logEvent">The event details to be logged.</param>
-        /// <returns>A task that represents the asynchronous logging operation.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="logEvent"/> is null.</exception>
         public async Task LogAsync(LogEvent logEvent)
         {
             if (logEvent == null) throw new ArgumentNullException(nameof(logEvent));
-
-            if (!_config.ShouldLog(logEvent.Level))
-                return;
+            if (!_config.ShouldLog(logEvent.Level)) return;
 
             var messageBody = _config.MessageTemplate
                 .Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat))
@@ -54,7 +37,6 @@ namespace SwiftLogger.Loggers
                 .Replace("{Level}", logEvent.Level.ToString())
                 .Replace("{Message}", logEvent.Message);
 
-
             using var mailMessage = new MailMessage
             {
                 From = new MailAddress(_config.FromAddress ?? string.Empty),
@@ -62,37 +44,30 @@ namespace SwiftLogger.Loggers
                 Body = messageBody
             };
 
-            // Add recipients
-            foreach (var recipient in _config.Recipients)
+            // Add To recipients
+            foreach (var recipient in _config.GetToRecipients())
+            {
+                mailMessage.To.Add(recipient);
+            }
+
+            // Add CC recipients
+            foreach (var recipient in _config.GetCcRecipients())
+            {
+                mailMessage.CC.Add(recipient);
+            }
+
+            // Add BCC recipients
+            foreach (var recipient in _config.GetBccRecipients())
             {
                 mailMessage.Bcc.Add(recipient);
             }
 
             // Add attachments
-            foreach (var attachmentSource in _config.Attachments)
+            var attachments = _config.GetAttachmentPaths().Select(path => new Attachment(path)).ToList();
+            foreach (var attachment in attachments)
             {
-                Attachment attachment;
-                if (attachmentSource.FilePath != null)
-                {
-                    attachment = new Attachment(attachmentSource.FilePath);
-                }
-                else if (attachmentSource.FileStream != null)
-                {
-                    attachment = new Attachment(attachmentSource.FileStream, "attachment"); // Assuming a generic name for stream-based attachments
-                }
-                else if (attachmentSource.FileBytes != null)
-                {
-                    using MemoryStream memStream = new MemoryStream(attachmentSource.FileBytes);
-                    attachment = new Attachment(memStream, "attachment"); // Assuming a generic name for byte array-based attachments
-                }
-                else
-                {
-                    continue; // No valid source found
-                }
-
                 mailMessage.Attachments.Add(attachment);
             }
-
 
             try
             {
@@ -104,12 +79,6 @@ namespace SwiftLogger.Loggers
             }
         }
 
-        
-
-        /// <summary>
-        /// Releases the unmanaged resources used by the <see cref="EmailLogger"/> and optionally releases the managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
@@ -117,15 +86,16 @@ namespace SwiftLogger.Loggers
                 if (disposing)
                 {
                     _smtpClient.Dispose();
+                    // Dispose of any disposable attachments if not using a using statement.
+                    foreach (var attachment in _config.GetCurrentAttachments())
+                    {
+                        attachment.Dispose();
+                    }
                 }
-
                 _disposed = true;
             }
         }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);

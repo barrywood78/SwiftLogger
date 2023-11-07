@@ -1,143 +1,100 @@
-﻿#nullable enable
-
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using SwiftLogger.Enums;
 
 namespace SwiftLogger.Configs
 {
-    /// <summary>
-    /// Represents a configuration for email logging.
-    /// </summary>
-    public class EmailLoggerConfig : BaseLoggerConfig<EmailLoggerConfig>
+    public sealed class EmailLoggerConfig : BaseLoggerConfig<EmailLoggerConfig>
     {
-        // SMTP server details
-        internal string? SmtpServer { get; private set; }
-        internal int SmtpPort { get; private set; }
-        internal bool UseSsl { get; private set; }
+        public string SmtpServer { get; private set; }
+        public int SmtpPort { get; private set; }
+        public bool UseSsl { get; private set; }
+        public NetworkCredential Credentials { get; private set; }
+        public string FromAddress { get; private set; }
+        public string SubjectFormat { get; private set; }
+        private List<MailAddress> ToRecipients { get; } = new List<MailAddress>();
+        private List<MailAddress> CcRecipients { get; } = new List<MailAddress>();
+        private List<MailAddress> BccRecipients { get; } = new List<MailAddress>();
+        private List<Attachment> Attachments { get; } = new List<Attachment>();
+        private List<string> _attachmentPaths = new List<string>();
 
-        // Authentication details
-        internal NetworkCredential? Credentials { get; private set; }
 
-        // Email details
-        internal string? FromAddress { get; private set; }
-        internal List<string> Recipients { get; } = new();
-        internal string? SubjectFormat { get; private set; }
-        internal List<AttachmentSource> Attachments { get; } = new List<AttachmentSource>();
-
-        /// <summary>
-        /// Sets the SMTP server for email logging.
-        /// </summary>
-        /// <param name="server">The SMTP server.</param>
-        /// <returns>The email logger configuration.</returns>
         public EmailLoggerConfig SetSmtpServer(string server)
         {
-            if (string.IsNullOrWhiteSpace(server))
-                throw new ArgumentException("SMTP server cannot be null or whitespace.", nameof(server));
-
             SmtpServer = server;
             return this;
         }
 
-        /// <summary>
-        /// Sets the SMTP port for email logging.
-        /// </summary>
-        /// <param name="port">The SMTP port.</param>
-        /// <returns>The email logger configuration.</returns>
         public EmailLoggerConfig SetSmtpPort(int port)
         {
-            if (port <= 0 || port > 65535)
-                throw new ArgumentOutOfRangeException(nameof(port), "Port number must be between 1 and 65535.");
-
             SmtpPort = port;
             return this;
         }
 
-        /// <summary>
-        /// Configures the usage of SSL for SMTP.
-        /// </summary>
-        /// <param name="useSsl">Flag indicating whether to use SSL. Default is true.</param>
-        /// <returns>The email logger configuration.</returns>
-        public EmailLoggerConfig UseSecureSocketLayer(bool useSsl = true)
+        public EmailLoggerConfig UseSecureSocketLayer(bool useSsl)
         {
             UseSsl = useSsl;
             return this;
         }
 
-        /// <summary>
-        /// Sets the authentication credentials for SMTP.
-        /// </summary>
-        /// <param name="email">The email used for authentication.</param>
-        /// <param name="password">The password used for authentication.</param>
-        /// <returns>The email logger configuration.</returns>
-        public EmailLoggerConfig SetAuthentication(string email, string password)
+        public EmailLoggerConfig SetAuthentication(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("Email or password cannot be null or whitespace.");
-
-            Credentials = new NetworkCredential(email, password);
+            Credentials = new NetworkCredential(username, password);
             return this;
         }
 
-        
-        /// <summary>
-        /// Sets the sender's email address for email logging.
-        /// </summary>
-        /// <param name="from">The sender's email address.</param>
-        /// <returns>The email logger configuration.</returns>
-        public EmailLoggerConfig SetFromAddress(string from)
+        public EmailLoggerConfig SetFromAddress(string fromAddress)
         {
-            if (string.IsNullOrWhiteSpace(from))
-                throw new ArgumentException("From address cannot be null or whitespace.", nameof(from));
-
-            FromAddress = from;
+            FromAddress = fromAddress;
             return this;
         }
 
-        public EmailLoggerConfig SetSubjectFormat(string format)
+        public EmailLoggerConfig SetSubjectFormat(string subjectFormat)
         {
-            SubjectFormat = format;
+            SubjectFormat = subjectFormat;
             return this;
         }
 
-        public EmailLoggerConfig AddRecipient(string recipient)
+        public EmailLoggerConfig AddTo(string toAddress)
         {
-            if (string.IsNullOrWhiteSpace(recipient))
-                throw new ArgumentException("Recipient address cannot be null or whitespace.", nameof(recipient));
+            ToRecipients.Add(new MailAddress(toAddress));
+            return this;
+        }
 
-            Recipients.Add(recipient);
+        public EmailLoggerConfig AddCc(string ccAddress)
+        {
+            CcRecipients.Add(new MailAddress(ccAddress));
+            return this;
+        }
+
+        public EmailLoggerConfig AddBcc(string bccAddress)
+        {
+            BccRecipients.Add(new MailAddress(bccAddress));
             return this;
         }
 
         public EmailLoggerConfig AddAttachment(string filePath)
         {
-            Attachments.Add(AttachmentSource.FromFilePath(filePath));
+            _attachmentPaths.Add(filePath);
             return this;
         }
 
-        public EmailLoggerConfig AddAttachment(Stream stream)
+        public IEnumerable<string> GetAttachmentPaths()
         {
-            Attachments.Add(AttachmentSource.FromStream(stream));
-            return this;
+            return _attachmentPaths.AsEnumerable();
         }
 
-        public EmailLoggerConfig AddAttachment(byte[] bytes)
+        public EmailLoggerConfig ClearAttachments()
         {
-            Attachments.Add(AttachmentSource.FromBytes(bytes));
+            _attachmentPaths.Clear();
             return this;
         }
+
+        internal IEnumerable<MailAddress> GetToRecipients() => ToRecipients.AsReadOnly();
+        internal IEnumerable<MailAddress> GetCcRecipients() => CcRecipients.AsReadOnly();
+        internal IEnumerable<MailAddress> GetBccRecipients() => BccRecipients.AsReadOnly();
+        internal IEnumerable<Attachment> GetCurrentAttachments() => Attachments.AsReadOnly();
     }
-
-    internal class AttachmentSource
-    {
-        public string? FilePath { get; set; }
-        public Stream? FileStream { get; set; }
-        public byte[]? FileBytes { get; set; }
-
-        public static AttachmentSource FromFilePath(string path) => new AttachmentSource { FilePath = path };
-        public static AttachmentSource FromStream(Stream stream) => new AttachmentSource { FileStream = stream };
-        public static AttachmentSource FromBytes(byte[] bytes) => new AttachmentSource { FileBytes = bytes };
-    }
-
-
 }

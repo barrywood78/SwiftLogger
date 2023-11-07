@@ -15,8 +15,8 @@ var emailConfig = new EmailLoggerConfig()
     .SetAuthentication(emailFrom, smtpPassword)
     .SetFromAddress(emailFrom)
 
-    //.AddRecipient(emailToSms)
-    .AddRecipient(emailFrom)
+    .AddTo(emailFrom)
+    .AddCc(emailToSms)
 
     //.SetTimestampFormat("MM-dd HH:mm:ss") // Tested & Worked
     //.SetMessageTemplate("Custom Msg Test: {Level} - {Message} - {Timestamp} - END MSG") // Tested & Worked
@@ -25,7 +25,7 @@ var emailConfig = new EmailLoggerConfig()
     //.DisableLogging() // Tested & Worked
 
     //.SetSubjectFormat("Test App Log - {Timestamp}: {Level}") // Tested & Worked
-    //.AddAttachment(@"C:\Untitled.png") // Tested & Worked
+    .AddAttachment(@"C:\Untitled.png") // Tested & Worked
     ;
 
 
@@ -41,6 +41,13 @@ await logger.Log(LogLevel.Debug, "This is a debug message.");
 await logger.Log(LogLevel.Information, "This is an informational message.");
 await logger.Log(LogLevel.Warning, "This is a warning message.");
 await logger.Log(LogLevel.Error, "This is an error message.");
+
+emailConfig.ClearAttachments().AddAttachment(@"C:\Untitled.png");
+await logger.Log(LogLevel.Critical, "This is a critical message.");
+
+
+
+emailConfig.ClearAttachments().AddAttachment(@"C:\Untitled2.png");
 await logger.Log(LogLevel.Critical, "This is a critical message.");
 
 Console.WriteLine("Press any key to exit...");
