@@ -44,12 +44,21 @@ namespace SwiftLogger.Loggers
             if (!_config.ShouldLog(logEvent.Level))
                 return;
 
-            var messageBody = $"{logEvent.Timestamp.ToString(_config.TimestampFormat)} {logEvent.Level} {logEvent.Message}";
+            var messageBody = _config.MessageTemplate
+                .Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat))
+                .Replace("{Level}", logEvent.Level.ToString())
+                .Replace("{Message}", logEvent.Message);
+
+            var formattedSubject = (_config.SubjectFormat ?? "Log")
+                .Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat))
+                .Replace("{Level}", logEvent.Level.ToString())
+                .Replace("{Message}", logEvent.Message);
+
 
             using var mailMessage = new MailMessage
             {
                 From = new MailAddress(_config.FromAddress ?? string.Empty),
-                Subject = FormatSubject(logEvent),
+                Subject = formattedSubject,
                 Body = messageBody
             };
 
@@ -95,15 +104,7 @@ namespace SwiftLogger.Loggers
             }
         }
 
-        private string FormatSubject(LogEvent logEvent)
-        {
-            // This is a basic implementation. Depending on how complex your subject format gets,
-            // you might want a more sophisticated templating approach.
-            var formattedSubject = _config.SubjectFormat ?? "Log";
-            formattedSubject = formattedSubject.Replace("{Level}", logEvent.Level.ToString());
-            formattedSubject = formattedSubject.Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat));
-            return formattedSubject;
-        }
+        
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="EmailLogger"/> and optionally releases the managed resources.

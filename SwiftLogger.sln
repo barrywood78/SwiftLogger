@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwiftLogger", "SwiftLogger\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwiftLogger.Demo", "SwiftLogger.Demo\SwiftLogger.Demo.csproj", "{408D664C-2270-4287-AD2F-3AB353BC101D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftLogger.ConsoleLogger.Test", "SwiftLogger.ConsoleLogger.Test\SwiftLogger.ConsoleLogger.Test.csproj", "{34B76570-3BAE-4564-BA3B-3754DE9CFC68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftLogger.FileLogger.Test", "SwiftLogger.FileLogger.Test\SwiftLogger.FileLogger.Test.csproj", "{A11E1E2B-F9CE-4E75-BB10-CB697402099F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftLogger.EmailLogger.Test", "SwiftLogger.EmailLogger.Test\SwiftLogger.EmailLogger.Test.csproj", "{81769D2E-EDC0-4163-A4CD-EC1C89ED3658}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{408D664C-2270-4287-AD2F-3AB353BC101D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{408D664C-2270-4287-AD2F-3AB353BC101D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{408D664C-2270-4287-AD2F-3AB353BC101D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B76570-3BAE-4564-BA3B-3754DE9CFC68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B76570-3BAE-4564-BA3B-3754DE9CFC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B76570-3BAE-4564-BA3B-3754DE9CFC68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B76570-3BAE-4564-BA3B-3754DE9CFC68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A11E1E2B-F9CE-4E75-BB10-CB697402099F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A11E1E2B-F9CE-4E75-BB10-CB697402099F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A11E1E2B-F9CE-4E75-BB10-CB697402099F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A11E1E2B-F9CE-4E75-BB10-CB697402099F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81769D2E-EDC0-4163-A4CD-EC1C89ED3658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81769D2E-EDC0-4163-A4CD-EC1C89ED3658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81769D2E-EDC0-4163-A4CD-EC1C89ED3658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81769D2E-EDC0-4163-A4CD-EC1C89ED3658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

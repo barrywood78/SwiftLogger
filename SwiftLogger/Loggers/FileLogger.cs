@@ -57,7 +57,7 @@ namespace SwiftLogger
 
             if (_config.SeparateByDate)
             {
-                fileName += $"_{DateTime.UtcNow:yyyyMMdd}";
+                fileName += $"_{DateTime.Now:yyyyMMdd}";
             }
 
             if (_config.MaxFileSizeInBytes.HasValue)

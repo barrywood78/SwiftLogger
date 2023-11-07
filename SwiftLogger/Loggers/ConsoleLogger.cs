@@ -45,7 +45,12 @@ namespace SwiftLogger.Loggers
 
             try
             {
-                var message = $"{logEvent.Timestamp.ToString(_config.TimestampFormat)} {logEvent.Level} {logEvent.Message}";
+                //var message = $"{logEvent.Timestamp.ToString(_config.TimestampFormat)} {logEvent.Level} {logEvent.Message}";
+                var message = _config.MessageTemplate
+                .Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat))
+                .Replace("{Level}", logEvent.Level.ToString())
+                .Replace("{Message}", logEvent.Message);
+
                 Console.WriteLine(message);
             }
             catch (Exception ex)
