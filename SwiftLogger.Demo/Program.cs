@@ -11,7 +11,7 @@ var consoleConfig = new ConsoleLoggerConfig()
 var fileConfig = new FileLoggerConfig()
     .SetExcludeLogLevel(LogLevel.Error)
     .SetMinimumLogLevel(LogLevel.Information)
-    .SetFilePath("C:\\Logs\\SwiftLogger.txt")
+    .SetFilePath(@"C:\Logs\SwiftLogger.txt")
     .EnableSeparationByDate();
 
 
@@ -25,14 +25,10 @@ var emailConfig = new EmailLoggerConfig()
     .UseSecureSocketLayer(true)
     .SetAuthentication(emailFrom, smtpPassword)
     .SetFromAddress(emailFrom)
-    .AddRecipient(emailToSms) // emailToSms = Email address that sends SMS (text message)
-    
+    .AddTo(emailToSms) // emailToSms = Email address that sends SMS (text message)
     .SetMessageTemplate("Critical Log: {Timestamp} - {Message}")
     .SetMinimumLogLevel(LogLevel.Critical) // Only send emails for Critical Logs
-
-    .SetSubjectFormat("App Log")
-    //.AddAttachment(@"C:\Untitled.png") 
-    ;
+    .SetSubjectFormat("App Log");
 
 // Build the logger using configuration
 var logger = new LoggerConfigBuilder()
@@ -47,6 +43,8 @@ await logger.Log(LogLevel.Debug, "This is a debug message.");
 await logger.Log(LogLevel.Information, "This is an informational message.");
 await logger.Log(LogLevel.Warning, "This is a warning message.");
 await logger.Log(LogLevel.Error, "This is an error message.");
+
+emailConfig.ClearAttachments().AddAttachment(@"C:\Untitled.png"); // Clears all set attachments and then adds new one
 await logger.Log(LogLevel.Critical, "This is a critical message.");
 
 Console.WriteLine("Press any key to exit...");

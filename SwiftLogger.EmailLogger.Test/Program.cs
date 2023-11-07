@@ -25,7 +25,7 @@ var emailConfig = new EmailLoggerConfig()
     //.DisableLogging() // Tested & Worked
 
     //.SetSubjectFormat("Test App Log - {Timestamp}: {Level}") // Tested & Worked
-    .AddAttachment(@"C:\Untitled.png") // Tested & Worked
+    //.AddAttachment(@"C:\Untitled.png") // Tested & Worked
     ;
 
 
