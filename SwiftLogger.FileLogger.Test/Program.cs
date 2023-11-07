@@ -8,7 +8,7 @@ var fileLoggerConfig = new FileLoggerConfig()
     .SetTimestampFormat("yyyy-MM-dd HH:mm:ss") //Tested & Works
     .SetMessageTemplate("Custom Msg Test: {Level} - {Message} - {Timestamp} - END MSG") //Tested & Works
     .SetMinimumLogLevel(LogLevel.Warning) //Tested & Works
-    .SetFilePath("C:\\Logs\\SwiftLogger.txt") //Tested & Works
+    .SetFilePath(@"C:\Logs\SwiftLogger.txt") //Tested & Works
     .EnableSeparationByDate() //Tested & Works
     .SetMaxFileSize(500) //Tested & Works
 

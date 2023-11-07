@@ -3,72 +3,45 @@ using SwiftLogger.Configs;
 using SwiftLogger.Enums;
 using SwiftLogger.Models;
 
-//var consoleConfig = new ConsoleLoggerConfig()
-//    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
-//    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta);
-
-//var logger = new SwiftLoggerConfig()
-//                .LogTo.Console()
-//                .Build();
-
-
 var consoleConfig = new ConsoleLoggerConfig()
-    .SetTimestampFormat("0")
-    .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
-    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
-    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta)
-    .SetExcludeLogLevel(LogLevel.Debug);
+    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Cyan) 
+    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Green) 
+    .SetMinimumLogLevel(LogLevel.Information);
+
+var fileConfig = new FileLoggerConfig()
+    .SetExcludeLogLevel(LogLevel.Error)
+    .SetMinimumLogLevel(LogLevel.Information)
+    .SetFilePath("C:\\Logs\\SwiftLogger.txt")
+    .EnableSeparationByDate();
 
 
-//var logger = new SwiftLoggerConfig()
-//                .LogTo.Console(consoleConfig)
-//                .Build();
+string? smtpPassword = Environment.GetEnvironmentVariable("LOGGER_EMAIL_PASSWORD", EnvironmentVariableTarget.User) ?? string.Empty;
+string? emailFrom = Environment.GetEnvironmentVariable("LOGGER_EMAIL_FROM", EnvironmentVariableTarget.User) ?? string.Empty;
+string? emailToSms = Environment.GetEnvironmentVariable("LOGGER_EMAIL_TO_SMS", EnvironmentVariableTarget.User) ?? string.Empty;
 
-// Set up the Console Logger configuration
-//var consoleConfig = new ConsoleLoggerConfig()
-//    .SetColorForLogLevel(LogLevel.Error, ConsoleColor.Blue)
-//    .SetColorForLogLevel(LogLevel.Warning, ConsoleColor.Magenta)
-//    .SetExcludeLogLevel(LogLevel.Debug)
-//    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
-//    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");
-
-// Set up the File Logger configuration, with separation by date
-var fileLoggerConfig = new FileLoggerConfig()
-    .EnableSeparationByDate()
-    .SetFilePath("myLog.txt")
-    .SetExcludeLogLevel(LogLevel.Debug)
-    .SetTimestampFormat("dd/MM/yyyy HH:mm:ss")
-    .SetMessageTemplate("{Timestamp} - {Level}: {Message}");
-
-//// Build the logger using both configurations
-//var logger = new SwiftLoggerConfig()
-//    .LogTo.Console(consoleConfig)
-//    .LogTo.File(fileLoggerConfig)
-//    .Build();
-
-string? emailPassword = Environment.GetEnvironmentVariable("LOGGER_EMAIL_PASSWORD", EnvironmentVariableTarget.User) ?? string.Empty;
 var emailConfig = new EmailLoggerConfig()
     .SetSmtpServer("smtp.gmail.com")
     .SetSmtpPort(587)
     .UseSecureSocketLayer(true)
-    .SetAuthentication("barry.v.wood@gmail.com", emailPassword)
-    .SetFromAddress("barry.v.wood@gmail.com")
-    .AddRecipient("8195924544@msg.koodomobile.com")
-    .AddRecipient("barry.v.wood@gmail.com")
-    .SetTimestampFormat("yyyy-MM-dd HH:mm:ss")
-    .SetMessageTemplate("{Timestamp} - {Level}: {Message}")
-    .SetSubjectFormat("Test App Log - {Level} : {Timestamp} $$")
-    .AddAttachment("C:\\Untitled.png")
-    .SetMinimumLogLevel(LogLevel.Critical)
-    .DisableLogging();
+    .SetAuthentication(emailFrom, smtpPassword)
+    .SetFromAddress(emailFrom)
+    .AddRecipient(emailToSms)
+    
+    .SetMessageTemplate("Critical Log: {Timestamp} - {Message}")
+    .SetMinimumLogLevel(LogLevel.Critical) // Only send emails for Critical Logs
 
+    .SetSubjectFormat("App Log")
+    .AddAttachment(@"C:\Untitled.png") 
+    ;
+
+// Build the logger using configuration
 var logger = new LoggerConfigBuilder()
-    .LogTo.File(fileLoggerConfig)
+    .LogTo.Console(consoleConfig)
+    .LogTo.File(fileConfig)
     .Build();
 
 
-
-
+await logger.Log(LogLevel.Trace, "This is a Trace message.");
 await logger.Log(LogLevel.Debug, "This is a debug message.");
 await logger.Log(LogLevel.Information, "This is an informational message.");
 await logger.Log(LogLevel.Warning, "This is a warning message.");
