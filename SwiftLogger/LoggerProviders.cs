@@ -2,11 +2,13 @@
 
 using SwiftLogger.Configs;
 using SwiftLogger.Loggers;
+using System;
 
 namespace SwiftLogger
 {
     /// <summary>
     /// Provides methods to add different logger providers to a <see cref="LoggerConfigBuilder"/>.
+    /// This class acts as a facilitator for attaching various logger types (console, file, email) to a logging configuration.
     /// </summary>
     public sealed class LoggerProviders
     {
@@ -22,10 +24,11 @@ namespace SwiftLogger
         }
 
         /// <summary>
-        /// Adds a console logger to the parent configuration.
+        /// Adds a console logger to the parent configuration builder.
+        /// The console logger can be configured to log messages to the console.
         /// </summary>
-        /// <param name="config">Optional configuration for the console logger.</param>
-        /// <returns>The parent <see cref="LoggerConfigBuilder"/> to continue configuration.</returns>
+        /// <param name="config">Optional configuration for the console logger. If not provided, default settings are used.</param>
+        /// <returns>The parent <see cref="LoggerConfigBuilder"/> to continue configuration chaining.</returns>
         public LoggerConfigBuilder Console(ConsoleLoggerConfig? config = null)
         {
             _parent.AddLogger(new ConsoleLogger(config));
@@ -33,10 +36,11 @@ namespace SwiftLogger
         }
 
         /// <summary>
-        /// Adds a file logger to the parent configuration.
+        /// Adds a file logger to the parent configuration builder.
+        /// The file logger can be configured to log messages to a specified file.
         /// </summary>
-        /// <param name="config">Optional configuration for the file logger.</param>
-        /// <returns>The parent <see cref="LoggerConfigBuilder"/> to continue configuration.</returns>
+        /// <param name="config">Optional configuration for the file logger. If not provided, default settings are used.</param>
+        /// <returns>The parent <see cref="LoggerConfigBuilder"/> to continue configuration chaining.</returns>
         public LoggerConfigBuilder File(FileLoggerConfig? config = null)
         {
             _parent.AddLogger(new FileLogger(config));
@@ -44,10 +48,11 @@ namespace SwiftLogger
         }
 
         /// <summary>
-        /// Adds an email logger to the parent configuration.
+        /// Adds an email logger to the parent configuration builder.
+        /// The email logger can be configured to send log messages as emails.
         /// </summary>
-        /// <param name="config">Optional configuration for the email logger.</param>
-        /// <returns>The parent <see cref="LoggerConfigBuilder"/> to continue configuration.</returns>
+        /// <param name="config">Optional configuration for the email logger. If not provided, default settings are used.</param>
+        /// <returns>The parent <see cref="LoggerConfigBuilder"/> to continue configuration chaining.</returns>
         public LoggerConfigBuilder Email(EmailLoggerConfig? config = null)
         {
             _parent.AddLogger(new EmailLogger(config));

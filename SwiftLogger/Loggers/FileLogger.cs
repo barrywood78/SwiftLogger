@@ -7,6 +7,7 @@ namespace SwiftLogger
 {
     /// <summary>
     /// Provides methods to log messages to a file based on the provided configuration.
+    /// This logger handles writing log messages to a file, managing aspects like file path, size, and format.
     /// </summary>
     public class FileLogger : ILogger
     {
@@ -15,21 +16,21 @@ namespace SwiftLogger
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogger"/> class with the specified configuration.
         /// </summary>
-        /// <param name="config">The configuration for the file logger.</param>
+        /// <param name="config">The configuration for the file logger. If null, default settings are used.</param>
         public FileLogger(FileLoggerConfig config = null)
         {
             _config = config ?? new FileLoggerConfig();
         }
 
         /// <summary>
-        /// Logs a message to a file using the provided log event details.
+        /// Asynchronously logs a message to a file using the provided log event details.
         /// </summary>
-        /// <param name="logEvent">The event details to be logged.</param>
-        /// <returns>A task that represents the asynchronous logging operation.</returns>
+        /// <param name="logEvent">The event details to be logged. Must not be null.</param>
+        /// <returns>A task representing the asynchronous logging operation.</returns>
         public async Task LogAsync(LogEvent logEvent)
         {
             if (!_config.ShouldLog(logEvent.Level))
-                return;
+                return; // Skip logging if the log level is not enabled.
 
             var message = _config.MessageTemplate
                 .Replace("{Timestamp}", logEvent.Timestamp.ToString(_config.TimestampFormat))
@@ -45,7 +46,7 @@ namespace SwiftLogger
 
         /// <summary>
         /// Determines the target file path for logging based on the configuration settings.
-        /// It takes into account settings like separation by date and maximum file size.
+        /// This method considers settings like separation by date and maximum file size to generate the appropriate file path.
         /// </summary>
         /// <returns>The computed target file path for logging.</returns>
         private string GetTargetFilePath()
