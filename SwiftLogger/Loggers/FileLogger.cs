@@ -17,7 +17,7 @@ namespace SwiftLogger
         /// Initializes a new instance of the <see cref="FileLogger"/> class with the specified configuration.
         /// </summary>
         /// <param name="config">The configuration for the file logger. If null, default settings are used.</param>
-        public FileLogger(FileLoggerConfig config = null)
+        public FileLogger(FileLoggerConfig? config = null)
         {
             _config = config ?? new FileLoggerConfig();
         }
@@ -52,7 +52,7 @@ namespace SwiftLogger
         private string GetTargetFilePath()
         {
             string baseFilePath = _config.FilePath;
-            string directory = Path.GetDirectoryName(baseFilePath);
+            string? directory = Path.GetDirectoryName(baseFilePath);
             string fileName = Path.GetFileNameWithoutExtension(baseFilePath);
             string extension = Path.GetExtension(baseFilePath);
 
@@ -67,7 +67,7 @@ namespace SwiftLogger
                 while (true)
                 {
                     string tempFileName = $"{fileName}{(counter > 0 ? $"_{counter}" : "")}";
-                    string tempFilePath = Path.Combine(directory, $"{tempFileName}{extension}");
+                    string tempFilePath = Path.Combine(directory ?? string.Empty, $"{tempFileName}{extension}");
                     if (!File.Exists(tempFilePath) || new FileInfo(tempFilePath).Length < _config.MaxFileSizeInBytes.Value)
                     {
                         return tempFilePath;
@@ -76,7 +76,7 @@ namespace SwiftLogger
                 }
             }
 
-            return Path.Combine(directory, $"{fileName}{extension}");
+            return Path.Combine(directory ?? string.Empty, $"{fileName}{extension}");
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SwiftLogger.Loggers
         /// Initializes a new instance of the <see cref="EmailLogger"/> class with the specified email logger configuration.
         /// </summary>
         /// <param name="config">The configuration settings for email logging.</param>
-        public EmailLogger(EmailLoggerConfig config)
+        public EmailLogger(EmailLoggerConfig? config = null)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _smtpClient = new SmtpClient(_config.SmtpServer, _config.SmtpPort)

@@ -16,7 +16,7 @@ namespace SwiftLogger.Configs
         /// <summary>
         /// The SMTP server used for sending emails.
         /// </summary>
-        public string SmtpServer { get; private set; }
+        public string? SmtpServer { get; private set; }
 
         /// <summary>
         /// The port used for the SMTP server.
@@ -31,24 +31,24 @@ namespace SwiftLogger.Configs
         /// <summary>
         /// Credentials used for authenticating with the SMTP server.
         /// </summary>
-        public NetworkCredential Credentials { get; private set; }
+        public NetworkCredential? Credentials { get; private set; }
 
         /// <summary>
         /// The email address from which log emails are sent.
         /// </summary>
-        public string FromAddress { get; private set; }
+        public string? FromAddress { get; private set; }
 
         /// <summary>
         /// The format for the subject line of the log emails.
         /// </summary>
-        public string SubjectFormat { get; private set; }
+        public string? SubjectFormat { get; private set; }
 
         // Internal lists for managing email recipients and attachments.
         private List<MailAddress> ToRecipients { get; } = new List<MailAddress>();
         private List<MailAddress> CcRecipients { get; } = new List<MailAddress>();
         private List<MailAddress> BccRecipients { get; } = new List<MailAddress>();
         private List<Attachment> Attachments { get; } = new List<Attachment>();
-        private List<string> _attachmentPaths = new List<string>();
+        private List<string> _attachmentPaths = new();
 
         /// <summary>
         /// Sets the SMTP server for email sending.
